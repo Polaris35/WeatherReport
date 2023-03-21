@@ -1,25 +1,36 @@
 import { useState } from "react";
 
-import useSWRMutation from "swr/mutation";
-type Args = {
-    arg: {
-        name: string;
-        count: string;
-    };
-};
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { WheatherView } from "./WheatherView";
+import axios, { AxiosRequestConfig } from "axios";
 
-async function sendRequest(url: string, { arg }: Args) {
-    return fetch(url + "?" + new URLSearchParams(arg), {
-        method: "GET",
-    }).then((res) => res.json());
-}
+const getgeoData = async (name: string) => {
+    const { data } = await axios.get(
+        `https://geocoding-api.open-meteo.com/v1/search?name=${name}&count=1`
+    );
+    return data;
+};
 
 export function GeocodingView() {
     const [name, setName] = useState("");
-    const { trigger, data, isMutating } = useSWRMutation(
-        "https://geocoding-api.open-meteo.com/v1/search",
-        sendRequest
-    );
+
+    // Queries
+    const geoRequest = useQuery({
+        queryKey: ["geoData", { name: name }],
+        queryFn: () => getgeoData(name),
+        refetchOnWindowFocus: false,
+        enabled: false,
+    });
+
+    if (geoRequest.isSuccess) {
+        const requestResult = geoRequest.data.results[0];
+        return (
+            <WheatherView
+                latitude={requestResult.longitude}
+                longtitude={requestResult.longitude}
+            />
+        );
+    }
 
     return (
         <div>
@@ -30,12 +41,11 @@ export function GeocodingView() {
             />
             <button
                 onClick={() => {
-                    trigger({ name: name, count: "1" });
+                    geoRequest.refetch();
                 }}
             >
                 lets Find!
             </button>
-            {!isMutating && <div>{JSON.stringify(data)}</div>}
         </div>
     );
 }
