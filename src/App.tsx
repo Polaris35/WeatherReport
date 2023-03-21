@@ -1,5 +1,6 @@
-import "./App.css";
-import { GeocodingView } from "./components/GeocodingView";
+// import "./App.css";
+// import { GeocodingView } from "./components/GeocodingView";
+import { CityCard } from "./components/CityCard";
 
 import {
     useQuery,
@@ -15,7 +16,12 @@ function App() {
     return (
         <div id="root">
             <QueryClientProvider client={queryClient}>
-                <GeocodingView />
+                <CityCard
+                    cityName={"Berlin"}
+                    latitude={1.5555}
+                    longtitude={54.2323}
+                    countryCode={"DE"}
+                />
             </QueryClientProvider>
         </div>
     );
