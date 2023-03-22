@@ -16,12 +16,35 @@ function App() {
     return (
         <div id="root">
             <QueryClientProvider client={queryClient}>
-                <CityCard
-                    cityName={"Berlin"}
-                    latitude={1.5555}
-                    longtitude={54.2323}
-                    countryCode={"DE"}
-                />
+                <div className="grid gap-3 grid-cols-3">
+                    <CityCard
+                        cityName={"Berlin"}
+                        latitude={1.5555}
+                        longtitude={54.2323}
+                        countryCode={"DE"}
+                        elevation={34}
+                        population={3426354}
+                        location={"Land Berlin, Berlin, Stadt Berlin"}
+                    />
+                    <CityCard
+                        cityName={"Berlin"}
+                        latitude={1.5555}
+                        longtitude={54.2323}
+                        countryCode={"DE"}
+                        elevation={34}
+                        population={3426354}
+                        location={"Land Berlin, Berlin, Stadt Berlin"}
+                    />
+                    <CityCard
+                        cityName={"Berlin"}
+                        latitude={1.5555}
+                        longtitude={54.2323}
+                        countryCode={"DE"}
+                        elevation={34}
+                        population={3426354}
+                        location={"Land Berlin, Berlin, Stadt Berlin"}
+                    />
+                </div>
             </QueryClientProvider>
         </div>
     );
