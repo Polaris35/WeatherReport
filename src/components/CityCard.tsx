@@ -7,8 +7,9 @@ type Props = {
 
 export function CityCard(props: Props) {
     return (
-        <div className="p-3 border-2 border-solid border-black">
+        <div className="p-3 flex flex-col">
             <img
+                className="w-256px h-192px"
                 src={
                     "https://flagcdn.com/256x192/" +
                     props.countryCode.toLowerCase() +
