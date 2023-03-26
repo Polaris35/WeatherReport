@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-import { WheatherView } from "./WheatherView";
+import { WeatherView } from "./WeatherView";
 import axios, { AxiosRequestConfig } from "axios";
 import { CityCard } from "../components/CityCard";
 
