@@ -2,15 +2,22 @@
 // import { GeocodingView } from "./routes/GeocodingView";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GeocodingView } from "./routes/GeocodingView";
-import { WeatherView } from "./routes/WeatherView";
-// import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { WeatherView, loader as loaderWV } from "./routes/WeatherView";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ErrorPage from "./components/Error-page";
 
-// const router = createBrowserRouter([
-//     {
-//         path: "/",
-//         element: <div>Hello world!</div>,
-//     },
-// ]);
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <GeocodingView />,
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: "WeatherView/:cityName/:latitude/:longitude",
+        element: <WeatherView />,
+        loader: loaderWV,
+    },
+]);
 
 const queryClient = new QueryClient();
 
@@ -18,12 +25,7 @@ function App() {
     return (
         <div id="root">
             <QueryClientProvider client={queryClient}>
-                {/* <WeatherView
-                    latitude={52.52}
-                    longitude={13.41}
-                    cityName={"Berlin"}
-                /> */}
-                <GeocodingView />
+                <RouterProvider router={router} />
             </QueryClientProvider>
         </div>
     );

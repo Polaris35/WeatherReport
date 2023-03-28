@@ -1,3 +1,4 @@
+import { useLoaderData } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -7,15 +8,29 @@ type Props = {
     longitude: number;
 };
 
+export async function loader({ params }: any): Promise<{
+    props: Props;
+}> {
+    const props: Props = {
+        cityName: params.cityName,
+        latitude: params.latitude,
+        longitude: params.longitude,
+    };
+    return { props };
+}
+
 const getWheatherData = async (props: Props) => {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log(props);
     const { data } = await axios.get(
         `https://api.open-meteo.com/v1/forecast?latitude=${props.latitude}&longitude=${props.longitude}&hourly=temperature_2m,weathercode&daily=temperature_2m_max,temperature_2m_min,weathercode&windspeed_unit=ms&timezone=${timezone}&current_weather=true`
     );
     return data;
 };
 
-export function WeatherView(props: Props) {
+export function WeatherView() {
+    const { props } = useLoaderData() as { props: Props };
+
     const weatherQuery = useQuery(
         [{ latitude: props.latitude, longitude: props.longitude }],
         () => getWheatherData(props)
@@ -104,7 +119,7 @@ export function WeatherView(props: Props) {
                 </div>
             </section>
             <section className="px-5">
-                <ul className="flex gap-5 pb-5 overflow-x-scroll overflow-hidden scrollbar scrollbar-thumb-gray-100 scrollbar-track-transparent scrollbar-thumb-rounded-md">
+                <ul className="flex gap-5 pb-5 overflow-x-scroll overflow-hidden scrollbar scrollbar-thumb-gray-600 scrollbar-track-transparent scrollbar-thumb-rounded">
                     {weatherQuery.data.hourly.time.map(
                         (item: string, ind: number) => {
                             return (

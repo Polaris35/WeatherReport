@@ -4,6 +4,7 @@ import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { WeatherView } from "./WeatherView";
 import axios, { AxiosRequestConfig } from "axios";
 import { CityCard } from "../components/CityCard";
+import { Link } from "react-router-dom";
 
 const getgeoData = async (name: string) => {
     const { data } = await axios.get(
@@ -73,23 +74,27 @@ export function GeocodingView() {
                 {geoRequest.isSuccess ? (
                     geoRequest.data.results.map((item: any) => {
                         return (
-                            <CityCard
-                                countryCode={item.country_code}
-                                cityName={item.name}
-                                latitude={item.latitude}
-                                longitude={item.longitude}
-                                elevation={item.elevation}
-                                population={item.population}
-                                location={
-                                    item.admin1 +
-                                    ", " +
-                                    (item.admin2 ?? "") +
-                                    " " +
-                                    (item.admin3 ?? "") +
-                                    " " +
-                                    (item.admin4 ?? "")
-                                }
-                            />
+                            <Link
+                                to={`WeatherView/${item.name}/${item.latitude}/${item.longitude}`}
+                            >
+                                <CityCard
+                                    countryCode={item.country_code}
+                                    cityName={item.name}
+                                    latitude={item.latitude}
+                                    longitude={item.longitude}
+                                    elevation={item.elevation}
+                                    population={item.population}
+                                    location={
+                                        item.admin1 +
+                                        ", " +
+                                        (item.admin2 ?? "") +
+                                        " " +
+                                        (item.admin3 ?? "") +
+                                        " " +
+                                        (item.admin4 ?? "")
+                                    }
+                                />
+                            </Link>
                         );
                     })
                 ) : (
