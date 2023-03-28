@@ -10,7 +10,7 @@ type Props = {
 const getWheatherData = async (props: Props) => {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const { data } = await axios.get(
-        `https://api.open-meteo.com/v1/forecast?latitude=${props.latitude}&longitude=${props.longitude}&hourly=temperature_2m,relativehumidity_2m,rain,showers,snowfall,weathercode&daily=temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,snowfall_sum,windspeed_10m_max,windgusts_10m_max,winddirection_10m_dominant&windspeed_unit=ms&timezone=${timezone}&current_weather=true`
+        `https://api.open-meteo.com/v1/forecast?latitude=${props.latitude}&longitude=${props.longitude}&hourly=temperature_2m,weathercode&daily=temperature_2m_max,temperature_2m_min,weathercode&windspeed_unit=ms&timezone=${timezone}&current_weather=true`
     );
     return data;
 };
@@ -103,12 +103,12 @@ export function WeatherView(props: Props) {
                     )}
                 </div>
             </section>
-            <section>
-                <div className="flex gap-5 overflow-x-scroll px-5 overflow-hidden">
+            <section className="px-5">
+                <ul className="flex gap-5 pb-5 overflow-x-scroll overflow-hidden scrollbar scrollbar-thumb-gray-100 scrollbar-track-transparent scrollbar-thumb-rounded-md">
                     {weatherQuery.data.hourly.time.map(
                         (item: string, ind: number) => {
                             return (
-                                <div className="flex align-center flex-col gap-3 min-w-max text-center">
+                                <li className="flex align-center flex-col gap-3 min-w-max text-center">
                                     <div>{item.slice(11)}</div>
                                     <div>
                                         {weatherCode.get(
@@ -123,11 +123,51 @@ export function WeatherView(props: Props) {
                                         }
                                         °C
                                     </div>
-                                </div>
+                                </li>
                             );
                         }
                     )}
-                </div>
+                </ul>
+            </section>
+            <section className="py-5">
+                <ul className="flex flex-col px-5">
+                    <div className="divider"></div>
+                    {weatherQuery.data.daily.time.map(
+                        (item: string, ind: number) => {
+                            const date = new Date(item);
+
+                            return (
+                                <>
+                                    <li className="flex px-5 justify-between">
+                                        <div>
+                                            {date.getDate() +
+                                                " " +
+                                                date.toLocaleString("en-US", {
+                                                    month: "short",
+                                                })}
+                                        </div>
+                                        <div>
+                                            {weatherCode.get(
+                                                weatherQuery.data.daily
+                                                    .weathercode[ind]
+                                            )}
+                                        </div>
+                                        <div>
+                                            {
+                                                weatherQuery.data.daily
+                                                    .temperature_2m_min[ind]
+                                            }
+                                            <span className="opacity-50">
+                                                {`/${weatherQuery.data.daily.temperature_2m_max[ind]} °C`}
+                                            </span>
+                                        </div>
+                                    </li>
+                                    <div className="divider"></div>
+                                </>
+                            );
+                        }
+                    )}
+                </ul>
             </section>
         </div>
     );

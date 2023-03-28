@@ -4,7 +4,11 @@ module.exports = {
     theme: {
         extend: {},
     },
-    plugins: [require("daisyui")],
+    plugins: [require("daisyui"), require("daisyui-tailwind-scrollbar")],
+
+    variants: {
+        scrollbar: ["rounded"],
+    },
 
     daisyui: {
         styled: true,

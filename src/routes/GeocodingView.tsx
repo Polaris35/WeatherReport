@@ -35,22 +35,39 @@ export function GeocodingView() {
 
     return (
         <>
-            <div className="flex justify-center gap-2 mt-6">
-                <input
-                    type="text"
-                    placeholder="Type city name here"
-                    className="input input-bordered w-full max-w-xs"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-                <button
-                    className="btn btn-circle btn-outline"
-                    onClick={() => {
-                        geoRequest.refetch();
-                    }}
-                >
-                    <img src="public\search-icon.svg" className="w-6 h-6" />
-                </button>
+            <div className="form-control mt-6">
+                <div className="input-group justify-center">
+                    <input
+                        type="text"
+                        placeholder="Type city name here"
+                        className="input input-bordered"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                    <button
+                        className="btn btn-square"
+                        onClick={() => {
+                            if (name.length != 0) {
+                                geoRequest.refetch();
+                            }
+                        }}
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                            />
+                        </svg>
+                    </button>
+                </div>
             </div>
             <div className="grid grid-cols-3 auto-rows-max place-items-center gap-3 p-3">
                 {geoRequest.isSuccess ? (
